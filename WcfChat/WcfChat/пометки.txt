@@ -1,0 +1,40 @@
+﻿НЕСМОРЯ НА КОПИПАСТ КОДА ВСЕРАВНО ВОЗНИКАЛИ ОШИБКИ ВО КАК ОНИ РЕШАЛИСЬ ПО ХОДУ НАПИСАНИЕ:
+
+-------------------
+по ошибке здесь в качестве параметра передавал IServiceChat typeof(WcfChat.IServiceChat))) нежно просто 
+ServiceChat , тем смым получал 
+ошибку при попытке зпустить хост: Директива ServiceHost поддерживает только типы службы классов.
+
+решение проблемы нашел здесь http://qaru.site/questions/769141/hosting-an-wcf-service-into-a-website-issue-systemargumentexception-servicehost-only-supports-class-service-types
+в ответе: Вы должны указать имя класса вместо имени интерфейса
+
+-------------------
+запуск хоста от имени администратора иначе ошибка: 
+запускать хост нужно от имени администратора (или через папку Debug ChatHost.exe) или запускать
+VS от имени администратора 
+-------------------
+
+был вопрос по поповод TextChanged="TextBox_TextChanged" в проекте ChatClient а именно нужно ыло перепоеделить 
+этот атрибут в коде или вовсе убрат его (этот атрибут находился в свойсвах TextBox xaml кода нашей консоли 
+н виде Сергей не пояснил что нужно убрать TextChanged="TextBox_TextChanged" , или переопределить в коде 
+сначала я допер что нужно перепопределить (чтобы пропала ошибка) и сделал это так :  
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            tbUserName.Text = " "; // пустая срока или любой текст в соот-вующий бокс (TextBox x:Name="tbMessage")
+        }
+
+        private void TextBox_TextChanged_1(object sender, TextChangedEventArgs e)
+        {
+            tbMessage.Text = " "; // пустая срока или любой текст в соот-вующий бокс  TextBox x:Name="tbUserName"
+        }
+
+		но потом сделал как на видео - убрал переопределение этого атрибута и и убрал сами атрибуты : 
+		TextChanged="TextBox_TextChanged"  TextChanged="TextBox_TextChanged_1"
+
+		https://stackoverrun.com/ru/q/8646394  подсказка от сюда	
+--------------------
+
+
+
+
+ 
