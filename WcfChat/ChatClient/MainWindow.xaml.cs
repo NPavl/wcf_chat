@@ -17,90 +17,78 @@ using ChatClient.ServiceChat;
 namespace ChatClient
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml:
+    /// 
     /// клиентская часть (функционал с графическим интерфейсом)
     /// 
     /// </summary>
     public partial class MainWindow : Window, IServiceChatCallback
-    // дополнительно ChatClient.ServiceChat.IServiceChatCallback данной строчкой пишем полный путь и 
-    // подключаем интерфейс IServiceChatCallback и внизу реализовываем его MsgCallback (данный метод 
-    // возвращает сообщение клиентам)
+    
     {
-        bool isConnected = false; // отвечает за подлючен в данный момент клиент к сервису или нет
-
-        ServiceChatClient client; // создаем обьект типа хоста в клиенте что бы могли взаимодействовать 
-        // с его методами. так как мы его подключили в ссылках значит можем с ним работать.
+        bool isConnected = false; 
+        ServiceChatClient client;
         int ID;
-
-        // обработаем событие Window_Loaded 
-        private void Window_Loaded(object sender, RoutedEventArgs e) // подключение будет 
-        // происходить в момент вызова собыия у основного окна Window_Loaded. 
-        // тоесть когда клиент уже будет загружен 
+    
+        private void Window_Loaded(object sender, RoutedEventArgs e) 
+       
+        
         {
-            client = new ServiceChatClient(new System.ServiceModel.InstanceContext(this)); // когда клиент 
-            // будет загружен будем создавать и выделять 
-            // память под обьект ServiceChat.ServiceChatClient. в паремтры передаем обьект   
-            // типа instanceContext для того чтобы мы могли вызывать коллбеки. так как наше окно 
-            // MainWindow реализовывает интерфейс IServiceChatCallback то в парметре instanceContext 
-            // мы используем this тоесь прямо сюда и передаем.
+            client = new ServiceChatClient(new System.ServiceModel.InstanceContext(this)); 
         }
 
-        // подпишемся на еще одно событие , когда окно будет закрыватся мы выполним метод DisconnectUser 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+               private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             DisconnectUser();
         }
 
-        // обработка событий нажатия клавиш обьекта в окне
+        
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            // делаем проверку какая клавиша нажата: 
+            
 
-            if (e.Key == Key.Enter) // если нажата enter (значит ввели соощение его нужно отправить)
+            if (e.Key == Key.Enter) 
             {
 
-                if (client != null) // тоесть мы подключились  такиом случае отправляем сообщение 
+                if (client != null) 
                 {
-                    client.SendMsg(tbMessage.Text, ID); // в таком случае вызываем метод SendMsg. в парамерапердаем сообщение кооре находится в textbox massage
-                    tbMessage.Text = string.Empty; // поещаем в textbox пустую строку после того как отправили сообщение    
+                    client.SendMsg(tbMessage.Text, ID); 
+                    tbMessage.Text = string.Empty;   
                 }
             }
         }
 
-        // данный метод будет создава и проверять подключен ли юзер в данный момент 
-        void ConnectUser() // если не подключен то 
+       
+        void ConnectUser() 
         {
             if (!isConnected)
             {
-                ID = client.Connect(tbUserName.Text); // в момент коннекта присваеваем полю ID присваивать 
-                                                      // значение которое вернул этот метод. в параметры передаем имя клиента который конектится 
-                tbUserName.IsEnabled = false; // блокирует возможность изменить имя юзера когда мы подключены 
-                ConnectDisconnect.Content = "Disconnect"; // будем присваивать контент (текст) в том случае если мы уже нажали и подключились
-                isConnected = true; // подключить его
+                ID = client.Connect(tbUserName.Text); 
+                tbUserName.IsEnabled = false; 
+                ConnectDisconnect.Content = "Disconnect"; 
+                isConnected = true; 
             }
         }
 
-        // метод отключает юзера 
+        
         void DisconnectUser()
 
         {
-            if (isConnected) // исли мы уже подключились 
+            if (isConnected) 
             {
-                client.Disconnect(Name, ID); // в дисконнект передаем ID который получили из метода коннект  
-                client = null; // поле того как выполняем disconnect клиенту присваем нал   
-                tbUserName.IsEnabled = true; // наоборот если дисконнект то мы можем поменять имя юзера
-                ConnectDisconnect.Content = "Connect"; // то меняем текст кнопки на Connect
-                isConnected = false; // отключать юзера
+                client.Disconnect(Name, ID); 
+                client = null;  
+                tbUserName.IsEnabled = true; 
+                ConnectDisconnect.Content = "Connect"; 
+                isConnected = false; 
             }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (isConnected) // если мы подключены то 
+            if (isConnected)  
             {
-                DisconnectUser(); // выполняем метод дисконнект 
+                DisconnectUser(); 
             }
-            else // если не подключены - подключаемся 
+            else 
             {
                 ConnectUser();
             }
@@ -108,12 +96,9 @@ namespace ChatClient
 
         public void MsgCallback(string msg)
         {
-            lbChat.Items.Add(msg); // добавлем новый item в котором будут хранится сообщения. 
-            // каждый раз когда сервер будет присылать сообщения, в ListBox будет отображатся данное сообщение.
-            lbChat.ScrollIntoView(lbChat.Items[lbChat.Items.Count - 1]); // решаем проблему с 
-            // прокруткой сообщений, указах в парметрах
-            // элимент до которго мы хотим его проручивать [получим 
-            // количество элментво в списке и вычтем из него 1] 
+            lbChat.Items.Add(msg);  
+            lbChat.ScrollIntoView(lbChat.Items[lbChat.Items.Count - 1]); 
+            
         }
 
 

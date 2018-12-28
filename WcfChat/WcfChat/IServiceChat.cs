@@ -12,21 +12,20 @@ namespace WcfChat
     public interface IServiceChat
     {
         [OperationContract] 
-        int Connect(string name); // с помощью этого метода будем подключаться к сервису.
+        int Connect(string name); 
 
         [OperationContract] 
-        void Disconnect(string msg, int id); // будет вызыватся в момент когда клиент покидает чат (параметром принимает id)
-
+        void Disconnect(string msg, int id); 
         [OperationContract(IsOneWay =true)]
-        void SendMsg(string msg, int id); //  
+        void SendMsg(string msg, int id);  
 
 
     }
 
     public interface IServerChatCallback
     {
-        [OperationContract(IsOneWay =true)] // также IsOneWay true иначе сервер будет ожидать ответа от клиента получил оли он callback. сервер просто должен делать рассылку.
-        void MsgCallback(string msg); // данный метод возвращает сообщение клиентам 
+        [OperationContract(IsOneWay =true)] 
+        void MsgCallback(string msg); 
             
     }
 }
